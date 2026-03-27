@@ -18,6 +18,11 @@ function notFound(message) {
   return err;
 }
 
+async function listBorrows({ userId = null } = {}) {
+  if (userId !== null && !Number.isFinite(userId)) throw badRequest('userId is invalid');
+  return borrowsRepo.listBorrows({ userId });
+}
+
 async function borrowBook({ userId, bookId, dueDate }) {
   if (!Number.isFinite(bookId)) throw badRequest('bookId is required');
   if (typeof dueDate !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
@@ -32,4 +37,4 @@ async function borrowBook({ userId, bookId, dueDate }) {
   return borrow;
 }
 
-module.exports = { borrowBook };
+module.exports = { listBorrows, borrowBook };

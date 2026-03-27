@@ -25,11 +25,20 @@ async function login({ email, password }) {
 
   const accessToken = signAccessToken({
     sub: String(user.id),
-    role: 'user',
+    role: user.role || 'User',
     email: user.email,
+    name: user.name,
   });
 
-  return { accessToken };
+  return {
+    accessToken,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role || 'User',
+    },
+  };
 }
 
 module.exports = {

@@ -6,6 +6,7 @@ const authRouter = require('./routes/auth.routes');
 const meRouter = require('./routes/me.routes');
 const borrowsRouter = require('./routes/borrows.routes');
 const returnsRouter = require('./routes/returns.routes');
+const dashboardRouter = require('./routes/dashboard.routes');
 
 const app = express();
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use('/auth', authRouter);
 app.use('/me', meRouter);
 app.use('/borrows', borrowsRouter);
 app.use('/returns', returnsRouter);
+app.use('/dashboard', dashboardRouter);
 
 
 

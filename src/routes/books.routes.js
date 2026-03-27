@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { title, author } = req.body ?? {};
+  const { title, author, category, isbn } = req.body ?? {};
 
   if (typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ error: 'title is required' });
@@ -29,9 +29,47 @@ router.post('/', async (req, res) => {
 
   const safeAuthor =
     typeof author === 'string' && author.trim() ? author.trim() : null;
+  const safeCategory =
+    typeof category === 'string' && category.trim() ? category.trim() : null;
+  const safeIsbn =
+    typeof isbn === 'string' && isbn.trim() ? isbn.trim() : null;
 
-  const created = await booksRepo.createBook({ title: title.trim(), author: safeAuthor });
+  const created = await booksRepo.createBook({
+    title: title.trim(),
+    author: safeAuthor,
+    category: safeCategory,
+    isbn: safeIsbn,
+  });
   return res.status(201).json({ data: created });
+});
+
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { title, author, category, isbn } = req.body ?? {};
+
+  if (typeof title !== 'string' || !title.trim()) {
+    return res.status(400).json({ error: 'title is required' });
+  }
+
+  const safeAuthor =
+    typeof author === 'string' && author.trim() ? author.trim() : null;
+  const safeCategory =
+    typeof category === 'string' && category.trim() ? category.trim() : null;
+  const safeIsbn =
+    typeof isbn === 'string' && isbn.trim() ? isbn.trim() : null;
+
+  const updated = await booksRepo.updateBook(Number(id), {
+    title: title.trim(),
+    author: safeAuthor,
+    category: safeCategory,
+    isbn: safeIsbn,
+  });
+
+  if (!updated) {
+    return res.status(404).json({ error: 'Book not found' });
+  }
+
+  return res.json({ data: updated });
 });
 
 module.exports = router;
